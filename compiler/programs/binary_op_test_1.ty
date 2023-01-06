@@ -1,0 +1,51 @@
+
+
+
+
+function binary_add(a :i32, b : f32)->f32{
+    return a+b;
+}
+
+function binary_eq(a :i32, b : i32)->i32{
+    return a == b;
+}
+function binary_gte(a :i32, b : i32)->i32{
+    return a >= b;
+}
+function binary_gt(a :f32, b : i32)->i32{
+    return a > b;
+}
+function binary_div(a :f32, b : f32)->f32{
+    return a / b;
+}
+
+function binary_div2(a :f32, b : i32)->f32{
+    return a / b;
+}
+
+function binary_neq(a :f32, b : i32)->i32{
+    return a != b;
+}
+
+function main()->i32{
+    x : f32 = binary_add(2, 3.5);
+    print(x);
+    x2 : i32 = binary_eq(200,200);
+    print(x2);
+    x3 : i32 = binary_eq(200,10);
+    print(x3);
+    x4 : i32 = binary_gte(200,10);
+    print(x4);
+    x5 : i32 = binary_gt(10.01,10);
+    print(x5);
+    x6 : f32 = binary_div(10.01,20.02);
+    print(x6);
+    x7 : f32 = binary_div2(20.21,21);
+    print(x7);
+    x8 : i32 = binary_neq(-5.5,-5);
+    print(x8);
+    return 0;
+}
+
+
+main();

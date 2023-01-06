@@ -1,0 +1,44 @@
+function fa(n : i32) -> i32{
+    print('a()');
+    return 0;
+}
+
+function fb(n : i32) -> i32{
+    print('b()');
+    return 0;
+}
+
+function fc(n : i32) -> i32{
+    print('c()');
+    return 0;
+}
+
+function fd(n : i32) -> i32{
+    print('d()');
+    return 0;
+}
+function main() -> i32 {
+    a : i32 = 10;
+    if(a == 0){
+        print('if');
+        fa(a);
+        return 1;
+    }
+    elif(a == 1){
+        print('elif 1');
+        fb(a);
+        return 2;
+    }
+    elif(a == 10){
+        print('elif 2');
+        fc(a);
+        return 3;
+    }
+    else{
+        print('else');
+        fd(a);
+        return 20;
+    }
+}
+
+main();

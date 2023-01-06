@@ -1,0 +1,27 @@
+
+
+record testrec (
+ a : f32,
+ b : i8,
+ c : f32[]
+);
+function return_record(a : f32, b: i8, c: f32[]) -> testrec {
+
+    r :testrec = rec testrec(a,b,c);
+    return r;
+}
+function main() -> i8 {
+    a: f32 = 3.14159;
+    b : i8 = 128;
+    bb :  str = 'あc私';
+    print(bb);
+    c : f32[3] = [1.0,2.0,3.0];
+    r : testrec = return_record(a,b,c);
+    print(r.a);
+    print(r.b);
+    v : f32[3] = r.c;
+    print(10.781*v[1]);
+    return 1;
+}
+
+main();

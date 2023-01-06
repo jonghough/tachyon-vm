@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "opcode.h": "c",
+        "string.h": "c",
+        "stdint.h": "c",
+        "*.tcc": "c",
+        "string": "c",
+        "istream": "c",
+        "streambuf": "c"
+    }
+}

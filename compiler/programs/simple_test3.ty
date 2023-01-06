@@ -1,0 +1,31 @@
+
+
+function f1(a : i32) -> i32 {
+    print(a);
+    b : i32 = a * 2;
+    return b;
+}
+
+function f2(a : i32[]) -> i32[]{
+    print(a[0]);
+    print(a[1]);
+    print(a[2]);
+    c: i32[] = a;
+    b : i32[3] = [1,2,3];
+    return b;
+}
+
+function main() -> i32{
+    a : i32 = 10;
+    b : i32 = f1(a);
+    print(a);
+    print(b);
+    a : i32[3] = [7,8,9];
+    b : i32[] =f2(a);
+    print(b[0]);
+    print(b[1]);
+    print(b[2]);
+    return 0;
+}
+
+main();

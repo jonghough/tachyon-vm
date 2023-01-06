@@ -1,0 +1,12 @@
+
+
+function main()-> i32{
+    a : i8[3] = [3,4,5];
+    b : i32 = length(a);
+    c : i64[length(a)+2] = [6,7,8,9,10];
+    print(b);
+    print((!str! c[1] )+'     '+(!str! c[4] ));
+    return 0;
+}
+
+main();

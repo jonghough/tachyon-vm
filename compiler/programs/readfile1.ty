@@ -1,0 +1,10 @@
+function main()->i32{
+    fn : str = '/home/jon/development/c_and_cpp/vm/tachyon/compiler/programs/readfile1.ty';
+    fd : i32 = fopen(fn ,'r');
+    d : str = fread(fd,10);
+    fclose(fd);
+    print(d);
+    return 0;
+}
+
+main();

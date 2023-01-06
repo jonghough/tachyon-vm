@@ -1,0 +1,11 @@
+
+
+function main()-> i8{
+    a : str = 'z';
+    while (a != 'STOP'){
+        a=read();
+        print(a);
+    }
+    return 0;
+}
+main();

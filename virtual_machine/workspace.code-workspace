@@ -1,0 +1,29 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"stdint.h": "c",
+			"random": "c",
+			"topcode.h": "c",
+			"array": "c",
+			"string_view": "c",
+			"initializer_list": "c",
+			"utility": "c",
+			"unistd.h": "c",
+			"cstdlib": "c",
+			"string": "c",
+			"string.h": "c",
+			"types.h": "c",
+			"memory.h": "c",
+			"typeinfo": "c",
+			"stdio.h": "c",
+			"vm_binary_operations.h": "c",
+			"type_traits": "c",
+			"stdlib.h": "c"
+		}
+	}
+}

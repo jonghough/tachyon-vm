@@ -1,0 +1,11 @@
+function sub(p : i32) -> i32{
+    q : i32 = (p*p*3) + (5*p) - 1;
+    print(q);
+   return  0;
+}
+function main() -> i32 {
+    k : str =read();
+    p : i32 = (!i32! k);
+    return sub(p);
+}
+main();

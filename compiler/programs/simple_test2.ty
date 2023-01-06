@@ -1,0 +1,16 @@
+
+function getString() -> str {
+    a : str = 'hi there!';
+    b: str = a + '!!!';
+    return b[3] + b[4] + a[8];
+}
+
+
+function main() -> i32 {
+    f : str = getString();
+    print(f);
+    print('completed');
+    return 1;
+}
+
+main();

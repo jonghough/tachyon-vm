@@ -1,0 +1,19 @@
+
+function concat(a : str, b : str) -> str {
+    return a+b;
+}
+
+function main()->i32{
+    arr : str[2] = ['welcome', 'fd'];
+    res : str = '  ';
+    i : i32 = 0;
+    while (i < 2) {
+        res = concat(res,arr[i]);
+        i=i+1;
+    }
+    print(res);
+    return 1;
+
+}
+
+main();

@@ -1,0 +1,18 @@
+
+
+record MYRECORD (
+ x : i64,
+ y : i64,
+ z : str
+);
+
+
+
+function main() -> i64 {
+    a : MYRECORD = rec MYRECORD(5,3, 'coolaid');
+    b : MYRECORD = a;
+    print((!str!(b.x))+b.z);
+    return 0;
+}
+
+main();

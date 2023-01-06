@@ -1,0 +1,12 @@
+function main()->i32{
+    fn : str = '/tmp/abc.txt';
+    fd : i32 = fopen(fn ,'w');
+    fwrite(fd, 'dabc');
+    fclose(fd);
+    fd=fopen(fn ,'a');
+    fwrite(fd,'xyz');
+    fclose(fd);
+    return 0;
+}
+
+main();

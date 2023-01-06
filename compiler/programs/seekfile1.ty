@@ -1,0 +1,16 @@
+function main()->i32{
+    a: i32[4] = [1,2,3,4];
+    print(length(a));
+    fn : str = '/home/jon/development/c_and_cpp/vm/tachyon/compiler/programs/readfile1.ty';
+    fd : i32 = fopen(fn ,'r');
+
+    offset : i64 = 40;
+    pos : i32 = fseek(fd,offset,0);
+    print(pos);
+    d : str = fread(fd,10);
+    fclose(fd);
+    print(d);
+    return 0;
+}
+
+main();

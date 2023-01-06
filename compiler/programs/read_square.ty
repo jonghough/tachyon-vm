@@ -1,0 +1,8 @@
+
+function main() -> i64 {
+    k : str =read();
+    p : i64 = (!i64! k);
+    print(p*p);
+    return 0;
+}
+main();

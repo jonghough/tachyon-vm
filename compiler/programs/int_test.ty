@@ -1,0 +1,12 @@
+
+
+
+function main()->i8{
+ a : i8 = 2;
+ print(a);
+ a = 3;
+ print(a);
+ return a;
+}
+
+main();

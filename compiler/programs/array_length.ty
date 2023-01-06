@@ -1,0 +1,10 @@
+
+
+function main()-> i32{
+    a : i32[3] = [3,4,5];
+    b : i32 = length(a);
+    print(b);
+    return 0;
+}
+
+main();

@@ -1,0 +1,190 @@
+start: statement+
+
+IF:         "if"
+ELIF:       "elif"
+ELSE:       "else"
+WHILE:      "while"
+FOR:        "for"
+BREAK:      "break"
+CONTINUE:   "continue"
+IN:         "in"
+NOT:        "not"
+FUNCTION:   "function"
+RETURN:     "return"
+RECORD:     "record"
+REC: "rec"
+
+keywords:    (IF | ELIF | ELSE | WHILE | IN | FUNCTION)
+
+statement:   while_block
+            | if_block
+            | for_block
+            | function_decl
+            | variable_decl  ";"
+            | assign_array_index ";"
+            | assign_record_field ";"
+            | break_statement ";"
+            | continue_statement ";"
+            | record_type_decl ";"
+            | return_block ";"
+            | expression  ";"
+
+expression:  assign_variable
+            | binary_exp
+            | function_call
+            | NUMBER
+            | STRING
+            | array_index
+            | identifier
+            | record_initialization
+            | push_record_field
+            | push_expression_index
+            | push_expression_field
+            | cast_expression
+            | not_expression
+            | bit_not_expression
+            | "(" expression ")"
+
+record_name: VARNAME
+record_var_param: VARNAME ":" TYPE
+record_var_list:   record_var_param
+                   |   record_var_param ","  record_var_list
+record_type_decl: RECORD record_name "(" record_var_list ")"
+record_initialization : REC record_name "(" record_arguments ")"
+record_arguments:     expression
+                      |   expression ","  record_arguments
+
+push_record_field:  record_name "." VARNAME
+push_expression_field: expression "." VARNAME
+push_expression_index:  expression "[" expression "]"
+variable_decl:      scalar_var_declaration
+                    | array_var_declaration
+
+type_decl : SCALAR_TYPE
+not_expression: NOT expression
+BIT_NOT: "~"
+bit_not_expression: BIT_NOT expression
+scalar_var_declaration: VARNAME ":" type_decl "=" expression
+
+array_var_declaration: VARNAME ":" (type_decl "[" array_size_declaration "]" | ARRAY_TYPE ) "=" (array_decl | array_decl_expression)
+
+array_size_declaration: NUMBER | expression
+function_decl:      (FUNCTION fname "(" ")"
+                    | FUNCTION fname "(" varlist ")" ) "->" return_type_decl "{"  fbody "}"
+function_call:      fname "(" arguments ")"
+                    | fname "(" ")"
+
+return_type_decl: TYPE
+cast_expression:    "!" TYPE "!" expression
+
+binary_exp: expression operator expression
+
+arguments:          expression
+                |   expression ","  arguments
+
+identifier:     VARNAME
+
+expression_list:    expression
+                |   expression "," expression_list
+
+array_decl_expression:      expression
+array_decl:     "[]"
+                | "[" expression_list "]"
+
+
+array_index:  VARNAME  "[" expression "]"
+assign_array_index: array_index "=" (expression | array_decl)
+assign_variable: VARNAME "=" expression
+assign_record_field: record_name "." VARNAME "=" expression
+
+if_block : if_clause (elif_clause*) (else_clause*)
+if_body: statement*
+if_clause:      IF "(" expression ")" "{" if_body "}"
+elif_clause:    ELIF "(" expression")" "{" if_body "}"
+else_clause:    ELSE "{" if_body "}"
+
+return_block: RETURN (expression)
+
+for_block: FOR "(" init_expression ";" stop_expression ";" iter_expression ")" "{" for_body "}"
+init_expression: expression
+stop_expression: expression
+iter_expression: expression
+for_body: statement*
+while_block: WHILE "(" expression ")" "{" while_body "}"
+while_body: statement*
+break_statement : BREAK
+continue_statement : CONTINUE
+operator:   ADD
+           | SUB
+           | MUL
+           | DIV
+           | REM
+           | EQ
+           | NEQ
+           | GT
+           | GTE
+           | LT
+           | LTE
+           | AND
+           | OR
+           | BIT_AND
+           | BIT_OR
+           | XOR
+           | L_SHIFT
+           | R_SHIFT
+
+fname: VARNAME
+
+TYPE: "str" | "i8" | "i32" | "i64" | "f32" | "f64"  | "str[]" | "i8[]" | "i32[]" | "i64[]" | "f32[]" | "f64[]" | VARNAME | VARNAME"[]"
+SCALAR_TYPE: "str" | "i8" | "i32" | "i64" | "f32" | "f64"  | VARNAME
+ARRAY_TYPE: "str[]" | "i8[]" | "i32[]" | "i64[]" | "f32[]" | "f64[]" | VARNAME"[]"
+var_param: VARNAME ":" TYPE
+varlist:    var_param
+        |   var_param ","  varlist
+
+fbody:      (f_statement*)
+f_statement: (statement)*
+VARNAME: ("a".."z")+ | (LETTER (LETTER|DIGIT|"_")*)
+ADD:    ("+")
+SUB:    ("-")
+MUL:    ("*")
+DIV:    ("/")
+REM:    ("%")
+EQ:     ("==")
+NEQ:    ("!=")
+LT:     ("<")
+LTE:    ("<=")
+GT:     (">")
+GTE:    (">=")
+AND:    ("&&")
+OR:     ("||")
+BIT_OR:    ("|")
+BIT_AND:   ("&")
+XOR:    ("^")
+L_SHIFT:    ("<<")
+R_SHIFT:    (">>")
+
+
+DEC_DIGIT: "0".."9"
+
+INT: DEC_DIGIT+
+SIGNED_INT: ["+"|"-"] INT
+FLOAT: INT "." INT? | "." INT
+SIGNED_FLOAT: ["+"|"-"] FLOAT
+DECIMAL: FLOAT | SIGNED_FLOAT
+INTEGER: INT | SIGNED_INT
+NUMBER: DECIMAL | INTEGER
+
+CHARS: /[u"\u0020-\u02af"]/
+UNICODE1: /[u"\u4E00-\u9FCC"]/
+UNICODE2: /[u"\u2000-\uFAAD"]/
+SPECIALCHARS: ("!"|"@"|"^"|"_"|"|"|"+"|"-"|"="|"~"|"<"|">"|"*"|"."|"}"|"{"|"["|"]"|"("|")"|"#"|"$"|"%"|"&"|"?"|"\\"|"/")
+NUM_CHARS: ("0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9")
+STRING: ("'" (NUM_CHARS| WORD| " "|SPECIALCHARS | UNICODE1| UNICODE2)* "'") | "''"
+
+%import common.LETTER
+%import common.WORD
+%import common.DIGIT
+%import common.ESCAPED_STRING
+%import common.WS
+%ignore WS

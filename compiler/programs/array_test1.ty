@@ -1,0 +1,16 @@
+
+
+
+function f1(arr : i8[]) -> i8[]{
+   arr[1]=100;
+   return arr;
+}
+
+function main()->i8{
+a : i8[5] = [1,2,3,4,5];
+b :i8[] = f1(a);
+print(b[1]);
+return 0;
+}
+
+main();

@@ -1,0 +1,29 @@
+
+
+record MYRECORD (
+ x : i32,
+ y : i32,
+ z : str
+);
+
+record REO (
+ x : i32[],
+ y : MYRECORD
+);
+
+
+function main() -> i32 {
+    a : MYRECORD = rec MYRECORD(5,3, 'coolaid');
+
+    b : i32[3] = [1374734,2,3];
+    c : REO = rec REO(b,a);
+    d : i32[] = c.x;
+    print(d[2]);
+
+    e : MYRECORD[2] = [a,a];
+    s : MYRECORD = e[1];
+    print(s.z);
+    return 0;
+}
+
+main();
