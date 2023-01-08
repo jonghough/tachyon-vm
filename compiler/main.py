@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import click
 
 from compile.code_writer import write_data, write_binary_data
@@ -18,7 +20,9 @@ from tachyonvm.tachyonvm import TachyonVM
 @click.option("--readable", "-r", type=bool, default=False,
               help='If true, the compiler will output no only the binary byte code, '
                    'but also a readable text file showing the opcodes .')
-def run(program, trace, vm, debug, readable) -> None:
+@click.option("--output", "-o", type=str, prompt='Output directory', default='./output',
+              help='Output directory location.')
+def run(program, trace, vm, debug, readable, output) -> None:
     with open(program) as p:
         prog = p.read()
 
@@ -40,10 +44,10 @@ def run(program, trace, vm, debug, readable) -> None:
             code = '\n'.join([o.as_text() for o in ops])
 
             binary_code = b''.join([o.as_binary() for o in ops])
-
+            output_dir = Path(output)
             if readable:
-                write_data(program, code)
-            write_binary_data(program, binary_code)
+                write_data(program, code,output_dir=output_dir)
+            write_binary_data(program, binary_code, output_dir=output_dir)
             if vm:
                 tvm = TachyonVM(code, debug=debug)
                 tvm.run()

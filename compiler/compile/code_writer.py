@@ -1,17 +1,23 @@
+from pathlib import Path
+
 from compile.byte_pack import pack_to_ty_code_zipped, pack_to_ty_code
 
 
-def write_data(program : str, code : str) -> None:
+def write_data(program: str, code: str, output_dir: Path) -> None:
     name = program.split("/")[-1].split(".")[0]
-
-    with open(f"./output/{name}.tcode", "w") as tcode:
+    tcode_file = output_dir / f"{name}/.tcode"
+    tycode_file = output_dir / f"{name}/.tycode"
+    with open(str(tcode_file), "w") as tcode:
         tcode.write(code)
-    with open(f"./output/{name}.tycode", "wb") as tbcode:
+    with open(str(tycode_file), "wb") as tbcode:
         tbcode.write(pack_to_ty_code(code))
 
-def write_binary_data(program : str, code : bytes) -> None:
+
+def write_binary_data(program: str, code: bytes, output_dir: Path) -> None:
     name = program.split("/")[-1].split(".")[0]
 
-    with open(f"./output/{name}.btcode", "wb") as tcode:
+    btcode_file = output_dir / f"{name}.btcode"
+    btyarc_file = output_dir / f"{name}.btyarc"
+    with open(str(btcode_file), "wb") as tcode:
         tcode.write(code)
-    pack_to_ty_code_zipped(f"./output/{name}.btcode", f"./output/{name}.btyarc")
+    pack_to_ty_code_zipped(str(btcode_file), str(btyarc_file))

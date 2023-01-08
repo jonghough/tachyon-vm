@@ -24,11 +24,11 @@ main();
 
 The six main datatypes are 
 1. `i8` : 8-bit signed integers.
-1. `i32` : 32-bit signed integers.
-2. `i64` : 64-bit signed integers.
-2. `f32`: 32-bit floating point numbers.
-2. `f64`: 64-bit floating point numbers.
-3. `str`: Strings, delimited by the `'` (single quote) character, not double quotes (`"`).
+2. `i32` : 32-bit signed integers.
+3. `i64` : 64-bit signed integers.
+4. `f32`: 32-bit floating point numbers.
+5. `f64`: 64-bit floating point numbers.
+6. `str`: Strings, delimited by the `'` (single quote) character, not double quotes (`"`).
 
 The other datatypes are 
 1. arrays - fixed sized homogeneous arrays.
@@ -129,3 +129,18 @@ main();
 ### Comments
 
 There are no comments, single line or multi-line.
+
+
+## Test Virtual Machine
+
+In the `./tacvhyonvm` subdirectory there is a test pytohn based virtual machine, used for prototyping the C based virtual machine.
+
+## Running virtual machine with a program
+
+The vm can run on the compiled code directly after compilation by adding the `-v` oprtion to the compilation command.
+
+```commandline
+python main.py --program /path/to/source.ty -v 1
+```
+
+This virtual machine is a simplified version of the C based VM (in the `../virtual_machine` directory).
