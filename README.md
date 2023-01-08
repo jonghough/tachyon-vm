@@ -84,7 +84,7 @@ main();
 
 The  main datatypes are 
 1. `i8`, `i32`, `i64` : 8,32,64-bit signed integers.
-2. `f32`, `f64``: 32,64-bit floating point numbers.
+2. `f32`, `f64`: 32,64-bit floating point numbers.
 3. `str`: Strings, delimited by the `'` (single quote) character, not double quotes (`"`).
 
 The other datatypes are 
@@ -99,14 +99,14 @@ All variables are passed by value and there are no pointers or references, limit
 ### Defining an array
 
 ```
-arr : int[10] = [1,2,3,4,5,6,7,8,9,10];
+arr : i8[10] = [1,2,3,4,5,6,7,8,9,10];
 ```
 ### Defining a record type
 ```
 record vector (
- x : float,
- y : float,
- z : float
+ x : f32,
+ y : f32,
+ z : f32
 );
 ```
 
