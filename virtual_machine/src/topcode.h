@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include "datatypes.h"
 
- 
 typedef struct
 {
     char *name;
@@ -33,7 +32,10 @@ typedef struct
     code *code_arr;
 } code_vals;
 
-typedef struct
+typedef struct virtual_machine virtual_machine;
+typedef void (*gc_op)(virtual_machine *v, int run_cleanup);
+
+struct virtual_machine
 {
     uint64_t max_heap_size;        /* max size of heap */
     uint64_t heap_size;            /* size of heap */
@@ -51,12 +53,10 @@ typedef struct
     uint8_t debug;                 /* debug flag. Output debug info. */
     code_vals *code;               /* code vector */
     prog *prog;                    /* the program instructions */
-    gc_obj *heap_refs;             /* linked list of gc heap objects */ 
-} virtual_machine;
- 
- 
+    gc_obj *heap_refs;             /* linked list of gc heap objects */
+    gc_op gc_op;                   /* gc operation callback */
+};
 
- 
 extern op topcodes[];
 
 op get_op(char *name);

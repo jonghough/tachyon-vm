@@ -157,13 +157,19 @@ void sweep(virtual_machine *v)
     }
 }
 
-void run_gc(virtual_machine *v)
+void run_gc(virtual_machine *v, int run_cleanup)
 {
 #if DEBUG_BUILD
     ty_log(TY_INFO, "**** BEGIN GC *****\n");
+    if (run_cleanup){ 
+    ty_log(TY_INFO, "**** CLEANUP GC *****\n");
+    }
 #endif
     mark(v);
     sweep(v);
+    if(run_cleanup){
+        cleanup_gc(v);
+    }
 #if DEBUG_BUILD
     ty_log(TY_INFO, "**** END GC *****\n");
 #endif

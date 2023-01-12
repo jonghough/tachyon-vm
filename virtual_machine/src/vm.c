@@ -9,7 +9,7 @@
 #include "memory.h"
 #include "log.h"
 
-virtual_machine *create_vm(long stack_size, long max_heap_size, char *program, uint32_t program_size, uint8_t debug)
+virtual_machine *create_vm(long stack_size, long max_heap_size, char *program, uint32_t program_size, uint8_t debug, gc_op gc_op)
 {
     virtual_machine *vm = (virtual_machine *)malloc(sizeof(virtual_machine));
 
@@ -29,13 +29,13 @@ virtual_machine *create_vm(long stack_size, long max_heap_size, char *program, u
     vm->SP = 0;
     vm->FP = 0;
     vm->debug = debug;
+    vm->gc_op = gc_op;
     return vm;
 }
 
 void destroy_vm(virtual_machine *vm)
 {
-    run_gc(vm);
-    cleanup_gc(vm);
+    vm->gc_op(vm, 1);
 #if DEBUG_BUILD
     ty_log(TY_DEBUG, "DESTROYING NOW!\n");
 #endif
@@ -116,7 +116,7 @@ void initialize(virtual_machine *v)
     }
     else
     {
-        ty_log(TY_ERROR,"Error. Header informaiton not found. Malformed program.\n");
+        ty_log(TY_ERROR, "Error. Header informaiton not found. Malformed program.\n");
         exit(1);
     }
 
@@ -124,12 +124,12 @@ void initialize(virtual_machine *v)
     v->EP = ep;
     if (ep == -1)
     {
-        ty_log(TY_ERROR,"Error. Malformed header cannot be parsed correctly.\n");
+        ty_log(TY_ERROR, "Error. Malformed header cannot be parsed correctly.\n");
         exit(1);
     }
     if (prog_sz == -1)
     {
-        ty_log(TY_ERROR,"Error. Malformed header cannot be parsed correctly.\n");
+        ty_log(TY_ERROR, "Error. Malformed header cannot be parsed correctly.\n");
         exit(1);
     }
     v->code = (code_vals *)malloc(sizeof(code_vals));
@@ -213,7 +213,7 @@ void read_one(virtual_machine *vm)
 {
     code c = vm->code->code_arr[vm->IP];
 #if DEBUG_BUILD
-    ty_log(TY_DEBUG,"# =================== selected op is name:\t%-18s, value: %-8d ===================\n", c.opcode.name, c.opcode.value);
+    ty_log(TY_DEBUG, "# =================== selected op is name:\t%-18s, value: %-8d ===================\n", c.opcode.name, c.opcode.value);
     get_heap_size(vm);
 #endif
     debug_stack(vm);

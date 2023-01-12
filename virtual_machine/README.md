@@ -5,7 +5,7 @@
 ### running example
 
 ```
-./build/tachyon -s 600 -h 1000 -p ../compiler/output/countdown.tyarc -d 1
+./build/tachyon -s 600 -h 1000 -p ../compiler/output/countdown.btyarc -d 0
 ```
 
 ### Options and arguments
@@ -32,6 +32,10 @@ to create the Makefile. Then simply use `make`
 ```
 make
 ```
-to compile.
+to compile. 
 
-The comilation will probably only work on **Linux**, using GCC, and has only been tested on Linux. 
+The output executable `tachyon` will be found in the `build/` subdirectory.
+
+### Platforms
+
+The comilation will probably only work on **Linux**, using GCC (Ubuntu 9.4.0-1ubuntu1~20.04.1) and Clang (10.0.0-4ubuntu1) and has only been tested on Linux. 

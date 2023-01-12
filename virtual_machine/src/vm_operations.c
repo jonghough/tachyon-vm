@@ -279,7 +279,7 @@ void inc_sp(virtual_machine *v)
 void clear(virtual_machine *v, uint32_t n)
 {
     data d = v->stack[n];
-    printf("data clear %d",d.type);
+    printf("data clear %d", d.type);
     ty_log(TY_DEBUG, "data clear");
     d.type = NONE;
     dec_sp(v);
@@ -447,9 +447,9 @@ void readx(virtual_machine *v)
 void ret(virtual_machine *v)
 {
     uint32_t fp = v->FP;
-    //uint32_t param_count = v->stack[fp + 2].content.xi32;
-    //uint32_t local_count = v->stack[fp + 3].content.xi32;
-    //uint32_t lim = fp + HEADER_SIZE + param_count + local_count;
+    // uint32_t param_count = v->stack[fp + 2].content.xi32;
+    // uint32_t local_count = v->stack[fp + 3].content.xi32;
+    // uint32_t lim = fp + HEADER_SIZE + param_count + local_count;
     data r = SP_VAL;
 
     uint32_t sp = v->ST;
@@ -474,8 +474,8 @@ void ret(virtual_machine *v)
     }
 
     v->ST = v->SP;
-
-    run_gc(v);
+    /*** RUN GC HERE **/
+    v->gc_op(v, 0);
 }
 
 void set_param(virtual_machine *v, uint32_t n)
