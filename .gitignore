@@ -177,3 +177,5 @@ _deps
 **/*.btyarc
 **/*.btcode
 **/*.tcode
+
+**/.vscode/

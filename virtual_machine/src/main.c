@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
             gc_on = atoi(optarg);
             break;
         default:
-            fprintf(stderr, "Usage: %s [-shp] [file...]\n", argv[0]);
+            fprintf(stderr, "Usage: %s [-shpdg]\n", argv[0]);
             exit(1);
         }
     }
