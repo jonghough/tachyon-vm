@@ -3,8 +3,7 @@
 #include <sys/types.h>
 #include "vm_operations.h"
 #include "vm_defs.h"
-#include "memory.h"
-#include "gc.h"
+#include "memory.h" 
 #include "log.h"
 
 void rem(virtual_machine *v)
