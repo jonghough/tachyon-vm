@@ -14,6 +14,12 @@ RETURN:     "return"
 RECORD:     "record"
 REC: "rec"
 
+
+NEWLINE: "\n"
+COMMENT: "#" /[^\n]*/ NEWLINE
+
+%ignore COMMENT
+
 keywords:    (IF | ELIF | ELSE | WHILE | IN | FUNCTION)
 
 statement:   while_block

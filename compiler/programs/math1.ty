@@ -1,0 +1,11 @@
+
+function main()->i32{
+
+    d :f64 = sin(0.5) + cos(1); # trig
+    print(d);
+    return 0;
+    # hi
+
+}
+
+main();

@@ -1,8 +1,12 @@
+import math
 import shlex
 
 import click
 
 from tachyonvm.Datatypes import Record
+from tachyonvm.binaryops import BinaryOps
+from tachyonvm.fileops import FileOps
+from tachyonvm.mathops import MathOps
 
 
 class TachyonVM:
@@ -20,6 +24,9 @@ class TachyonVM:
         self._finish = False
         self.INSTR_PTR = 0
         self.debug_str = ""
+        self.math_ops = MathOps(self)
+        self.file_ops = FileOps(self)
+        self.binary_ops = BinaryOps(self)
         self._create_code_vector()
 
     def _create_code_vector(self):
@@ -57,31 +64,35 @@ class TachyonVM:
             print(f"executing instruction : {instruction}, with args : {args}")
             print(
                 f"SP: {self.stackPtr}, FP: {self.framePtr}, IP: {self.instructionPtr}\n stack before execution: {self.datastack[:self.stackPtr + 1]}")
-        if (not args or args == (None,)) and instruction not in ("and", "or", "not"):
+
+        if instruction in self.math_ops.ops_list:
+            getattr(self.math_ops, instruction)()
+        elif instruction in self.file_ops.ops_list:
+            getattr(self.file_ops, instruction)()
+        elif instruction in self.binary_ops.ops_list:
+            getattr(self.binary_ops, instruction)()
+        elif instruction in self.binary_ops.ops_list:
+            getattr(self.binary_ops, instruction)()
+        elif instruction in self.binary_ops.special_ops_list:
+            getattr(self.binary_ops, instruction + "x")()
+        elif (not args or args == (None,)) and instruction not in ("and", "or", "not"):
             getattr(self, instruction)()
+        elif instruction in ("ret", "stdout", "noop", "length", "push_stack_r",
+                             "push_stack_a"
+                             ):
+            getattr(self, instruction)()
+        elif instruction in (
+                "set_local_a", "push_i8", "push_i32", "push_i64", "push_f32",
+                "push_f64", "push_s", "call", "goto",
+                "set_param", "push_local_idx", "set_local_idx", "push_param_idx", "set_param_idx",
+                "push_param", "set_local", "push_local", "set_record_idx",
+                "set_param_record_idx",
+                "set_local_r", "push_local_r", "push_param_r", "jneq", "cast"):
+            getattr(self, instruction)(args[0])
+        elif instruction in ("size",):
+            getattr(self, instruction)(args[0], args[1])
         else:
-            if instruction in ("add", "sub", "mul", "div", "rem", "ret", "eq", "neq",
-                               "stdout", "noop", "gte", "bit_and", "bit_or", "xor",
-                               "bit_not", "l_shift", "r_shift", "length", "push_stack_r",
-                                "push_stack?a"
-                               ):
-                getattr(self, instruction)()
-            elif instruction in (
-                    "APPEND",
-                    "set_local_a", "push_i8", "push_i32", "push_i64", "push_f32",
-                    "push_f64", "push_s", "call", "goto",
-                    "set_param", "push_local_idx", "set_local_idx", "push_param_idx", "set_param_idx",
-                    "push_param", "set_local", "push_local", "set_record_idx",
-                    "set_param_record_idx",
-                    "set_local_r", "push_local_r", "push_param_r",
-                    "jneq", "cast", "fopen", "fclose", "fread", "fwrite", "fdelete"):
-                getattr(self, instruction)(args[0])
-            elif instruction in ("size",):
-                getattr(self, instruction)(args[0], args[1])
-            elif instruction in ("and", "or", "not"):
-                getattr(self, instruction + "x")()
-            else:
-                raise ValueError(f"unknown instruction {instruction}")
+            raise ValueError(f"unknown instruction {instruction}")
 
     def infer_type(self, data):
         # type inference should be handled by compiler
@@ -222,15 +233,17 @@ class TachyonVM:
         self.datastack[self.stackPtr] = self.datastack[self.framePtr + 4 + int(p) + int(n)].data[idx]
 
         self.instructionPtr += 1
+
     def push_stack_r(self):
         idx = int(self.datastack[self.stackPtr])
-        rec = self.datastack[self.stackPtr-1]
+        rec = self.datastack[self.stackPtr - 1]
         self.datastack[self.stackPtr] = rec.data[idx]
 
         self.instructionPtr += 1
+
     def push_stack_a(self):
         idx = int(self.datastack[self.stackPtr])
-        arr = self.datastack[self.stackPtr-1]
+        arr = self.datastack[self.stackPtr - 1]
         self.datastack[self.stackPtr] = arr[idx]
 
         self.instructionPtr += 1
@@ -390,162 +403,6 @@ class TachyonVM:
         self.datastack[self.stackPtr] = cr
         self.instructionPtr += 1
 
-    def add(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = t1 + t0
-        self.instructionPtr += 1
-
-    def sub(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = t1 - t0
-        self.instructionPtr += 1
-
-    def mul(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = t0 * t1
-        self.instructionPtr += 1
-
-    def div(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = t1 / t0
-        self.instructionPtr += 1
-
-    def rem(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = t1 % t0
-        self.instructionPtr += 1
-
-    def eq(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = int(t0 == t1)
-        self.instructionPtr += 1
-
-    def neq(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = int(t0 != t1)
-        self.instructionPtr += 1
-
-    def gt(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = int(t1 > t0)
-        self.instructionPtr += 1
-
-    def gte(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = int(t1 >= t0)
-        self.instructionPtr += 1
-
-    def lt(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = int(t1 < t0)
-        self.instructionPtr += 1
-
-    def lte(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = int(t1 <= t0)
-        self.instructionPtr += 1
-
-    def andx(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = int(t1 > 0 and t0 > 0)
-        self.instructionPtr += 1
-
-    def orx(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = int(t1 > 0 or t0 > 0)
-        self.instructionPtr += 1
-
-    def bit_and(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = int(t1 & t0)
-        self.instructionPtr += 1
-
-    def bit_or(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = int(t1 | t0)
-        self.instructionPtr += 1
-
-    def xor(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = int(t1 ^ t0)
-        self.instructionPtr += 1
-
-    def l_shift(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = int(t1 << t0)
-        self.instructionPtr += 1
-
-    def r_shift(self):
-        t0, t1 = self._take2()
-        t0 = self.infer_type(t0)
-        t1 = self.infer_type(t1)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = int(t1 >> t0)
-        self.instructionPtr += 1
-
-    def bit_not(self):
-        a = self.datastack[self.stackPtr]
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = int(~a)
-        self.instructionPtr += 1
-
-    def notx(self):
-        a = self.datastack[self.stackPtr]
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = 1 if int(a) == 0 else 0
-        self.instructionPtr += 1
-
     def length(self):
         # do not increment the stack pointer here.
         v = self.datastack[self.stackPtr]
@@ -553,63 +410,6 @@ class TachyonVM:
 
         self.datastack[self.stackPtr] = l
 
-        self.instructionPtr += 1
-
-    def fopen(self):
-        mode = self.datastack[self.stackPtr]
-        self.stackPtr -= 1
-        file_name = self.datastack[self.stackPtr]
-        self.stackPtr -= 1
-        fd = open(file=file_name, mode=mode)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = fd
-        self.instructionPtr += 1
-
-    def fclose(self):
-        fd = self.datastack[self.stackPtr]
-        self.stackPtr -= 1
-        fd.close()
-        self.instructionPtr += 1
-
-    def fread(self):
-        bytes = self.datastack[self.stackPtr]
-        self.stackPtr -= 1
-        fd = self.datastack[self.stackPtr]
-        self.stackPtr -= 1
-        data = fd.read(bytes)
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = data
-        self.instructionPtr += 1
-
-    def fwrite(self):
-        data = self.datastack[self.stackPtr]
-        self.stackPtr -= 1
-        fd = self.datastack[self.stackPtr]
-        self.stackPtr -= 1
-        fd.write(data)
-        self.instructionPtr += 1
-
-    def fseek(self):
-        whence = self.datastack[self.stackPtr]
-        self.stackPtr -= 1
-        offset = self.datastack[self.stackPtr]
-        self.stackPtr -= 1
-        fd = self.datastack[self.stackPtr]
-        self.stackPtr -= 1
-        fd.seek(offset,whence)
-        # python seek returns None, so we simulate it returning a value, (0) in this case
-        self.stackPtr += 1
-        self.datastack[self.stackPtr] = 1
-        self.instructionPtr += 1
-
-    def ftell(self):
-        whence = self.datastack[self.stackPtr]
-        self.stackPtr -= 1
-        offset = self.datastack[self.stackPtr]
-        self.stackPtr -= 1
-        fd = self.datastack[self.stackPtr]
-        self.stackPtr -= 1
-        fd.seek(offset,whence)
         self.instructionPtr += 1
 
 

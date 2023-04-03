@@ -98,8 +98,23 @@ op topcodes[] = {
     {"fseek", 57},
     {"push_stack_r", 58},
     {"push_stack_a", 59},
+      {"sin", 60},
+    {"cos", 61},
+    {"tan", 62},
+    {"asin", 63},
+    {"acos", 64},
+    {"atan", 65},
+    {"sinh", 66},
+    {"cosh", 67},
+    {"tanh", 68},
+    {"asinh", 69},
+    {"acosh", 70},
+    {"atanh", 71},
+    {"exp", 72},
+    {"log", 73},
+    {"log10", 74},
     {"notfound",
-     60}
+     75}
 
 };
 

@@ -14,6 +14,7 @@ void destroy_prec(prec *m);
 pfile *allocate_mem_pfile(virtual_machine *v);
 void destroy_pfile(pfile *m);
 
+
 data *allocate_mem_data(virtual_machine *v, uint32_t num, uint8_t with_gc);
 void destroy_data(data *d);
 

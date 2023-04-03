@@ -23,7 +23,8 @@
 			"stdio.h": "c",
 			"vm_binary_operations.h": "c",
 			"type_traits": "c",
-			"stdlib.h": "c"
+			"stdlib.h": "c",
+			"math.h": "c"
 		}
 	}
 }

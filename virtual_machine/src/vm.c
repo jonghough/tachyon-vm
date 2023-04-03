@@ -8,6 +8,7 @@
 #include "topcode.h"
 #include "memory.h"
 #include "log.h"
+#include "ty_math.h"
 
 virtual_machine *create_vm(long stack_size, long max_heap_size, char *program, uint32_t program_size, uint8_t debug, gc_op gc_op)
 {
@@ -503,6 +504,51 @@ void read_one(virtual_machine *vm)
         push_stack_a(vm);
         break;
     case 0x003C:
+        ty_sin(vm);
+        break;
+    case 0x003D:
+        ty_cos(vm);
+        break;
+    case 0x003E:
+        ty_tan(vm);
+        break;
+    case 0x003F:
+        ty_asin(vm);
+        break;
+    case 0x0040:
+        ty_acos(vm);
+        break;
+    case 0x0041:
+        ty_atan(vm);
+        break;
+    case 0x0042:
+        ty_sinh(vm);
+        break;
+    case 0x0043:
+        ty_cosh(vm);
+        break;
+    case 0x0044:
+        ty_tanh(vm);
+        break;
+    case 0x0045:
+        ty_asinh(vm);
+        break;
+    case 0x0046:
+        ty_acosh(vm);
+        break;
+    case 0x0047:
+        ty_atanh(vm);
+        break;
+    case 0x0048:
+        ty_exp(vm);
+        break;
+    case 0x0049:
+        ty_logar(vm);
+        break;
+    case 0x004A:
+        ty_logar10(vm);
+        break;
+    case 0x004B:
         // not found
         break;
     }

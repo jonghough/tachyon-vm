@@ -29,7 +29,20 @@ func_ops = {
     "fclose": ["fclose", DT.INT32, (DT.INT32,)],
     "fseek": ["fseek", DT.INT32, (DT.INT32, DT.INT64, DT.INT32)],
     "ftell": ["ftell", DT.INT32, (DT.INT32,)],
-    "fdelete": ["fdelete", DT.INT32, (DT.INT32,)]
+    "fdelete": ["fdelete", DT.INT32, (DT.INT32,)],
+    "sin": ["sin", DT.FLOAT64, ("Any",)],
+    "cos": ["cos", DT.FLOAT64, ("Any",)],
+    "tan": ["tan", DT.FLOAT64, ("Any",)],
+    "asin": ["asin", DT.FLOAT64, ("Any",)],
+    "acos": ["acos", DT.FLOAT64, ("Any",)],
+    "atan": ["atan", DT.FLOAT64, ("Any",)],
+    "sinh": ["sinh", DT.FLOAT64, ("Any",)],
+    "cosh": ["cosh", DT.FLOAT64, ("Any",)],
+    "tanh": ["tanh", DT.FLOAT64, ("Any",)],
+    "asinh": ["asinh", DT.FLOAT64, ("Any",)],
+    "acosh": ["acosh", DT.FLOAT64, ("Any",)],
+    "atanh": ["atanh", DT.FLOAT64, ("Any",)],
+
 }
 
 
@@ -88,7 +101,11 @@ class Compiler:
                 r = self.handle_expression(child, cxt)
 
                 if function_name not in (
-                        "print", "read", "length", "fopen", "fread", "fwrite", "fclose", "fseek", "ftell"):
+                        "print", "read", "length", "fopen", "fread", "fwrite", "fclose", "fseek", "ftell",
+                        "sin", "cos", "tan",
+                        "asin", "acos", "atan",
+                        "sinh", "cosh", "tanh",
+                        "asinh", "acosh", "atanh"):
                     func_type = cxt.get_context(function_name).params[param_idx][1]
                     if r.dtype != func_type.dtype:
                         if func_type.dtype in (DT.INT8, DT.INT32, DT.INT64) and \
@@ -774,8 +791,6 @@ class Compiler:
                 varname = child.children[0]
             elif child.data == AstSymbols.expression:
                 r = self.handle_expression(child, cxt)
-
-
 
         if varname in cxt.local_vars:
             lv: LocalVar = cxt.local_vars[varname]

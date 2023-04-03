@@ -24,7 +24,7 @@ add_compile_options(-Wall -Wextra -pedantic -Werror)
 add_definitions(-DDEBUG_BUILD=0) 
 add_executable(tachyon  ${TACHYON_SRC} ${TACHYON_INC})
 
-target_link_libraries(tachyon PUBLIC ${ZIP})
+target_link_libraries(tachyon PUBLIC ${ZIP} PRIVATE m)
 
 
 
