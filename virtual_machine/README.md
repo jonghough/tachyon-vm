@@ -8,6 +8,7 @@
 ./build/tachyon -s 600 -h 1000 -p ../compiler/output/countdown.btyarc -d 0
 ```
 
+
 ### Options and arguments
 
 `-s` is the max stack size, in "cells", which are 4 bytes. 
@@ -38,4 +39,4 @@ The output executable `tachyon` will be found in the `build/` subdirectory.
 
 ### Platforms
 
-The comilation will probably only work on **Linux**, using GCC (Ubuntu 9.4.0-1ubuntu1~20.04.1) and Clang (10.0.0-4ubuntu1) and has only been tested on Linux. 
+The compilation will probably only work on **Linux**, using GCC (Ubuntu 9.4.0-1ubuntu1~20.04.1) and Clang (10.0.0-4ubuntu1) and has only been tested on Linux. 

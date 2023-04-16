@@ -75,7 +75,7 @@ python main.py --program /path/to/source.ty -v 1
 ```
 function main() -> i32 {
  ...
- 1;
+ return 1;
 }
 
 main();
@@ -123,13 +123,13 @@ function xyz(var1 : i32, var2 : i32) -> f32 {
 
     f : f32 = 0.0;
     f = (!f32!var1) + (!f32!var2);
-    f;
+    return f;
 }
 
 function main() ->i32 {
     f : f32 = xyz(1,10);
     print(f);
-    1;
+    return 1;
 }
 
 main();
